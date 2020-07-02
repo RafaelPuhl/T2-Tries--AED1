@@ -1,5 +1,3 @@
-package AlgoritimoEstrutura1.Trees;
-
 import java.util.ArrayList;
 
 public class NodeTree {

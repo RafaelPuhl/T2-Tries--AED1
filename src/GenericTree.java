@@ -1,7 +1,6 @@
-package AlgoritimoEstrutura1.Trees;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class GenericTree {
     NodeTree refRoot;
@@ -77,7 +76,6 @@ public class GenericTree {
         for (int i = 0; i < reference.contSubTree(); i++) {
             searchTreePre(reference.getSubTree(i), list);
         }
-        return ;
     }
 
     public ArrayList<String> traversalPos(){
