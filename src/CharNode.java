@@ -1,8 +1,10 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CharNode {
+
     private final char character;
     private boolean isFinal;
     private CharNode father;
@@ -60,7 +62,7 @@ public class CharNode {
          * Encontra e retorna o nodo que tem determinado caracter.
          * @param character - caracter a ser encontrado.
      */
-    public CharNode findChildChar (char character) {
+    public Optional<CharNode> findChildChar (char character) {
 
     }
 
