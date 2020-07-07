@@ -14,7 +14,7 @@ public class CharNode {
         this(character, false, null);
     }
 
-    public CharNode(char character, boolean isFinal, CharNode father) {
+    private CharNode(char character, boolean isFinal, CharNode father) {
         this.character = character;
         this.isFinal = isFinal;
         this.father = father;
@@ -28,12 +28,10 @@ public class CharNode {
      */
 
     public CharNode addChild (char character, boolean isFinal) {
-        Optional<CharNode> charNode = this.children.stream()
-                .filter(it -> it.getCharacter() == character)
-                .findFirst();
+        CharNode charNode = findChildChar(character);
         CharNode child;
-        if (charNode.isPresent()) {
-            child = charNode.get();
+        if (charNode != null) {
+            child = charNode;
             if (!child.isFinal && isFinal) child.isFinal = true;
         }else {
             child = new CharNode(character, isFinal, this);
@@ -55,15 +53,33 @@ public class CharNode {
          * @return a palavra
      */
     private String getWord() {
-
+        List<Character> letters = new ArrayList<>();
+        letters.add(character);
+        CharNode parent = this.father;
+        while(parent != null) {
+            letters.add(parent.character);
+            parent = parent.father;
+        }
+        StringBuilder word = new StringBuilder("");
+        for (int i = letters.size() - 1; i >= 0; i--) {
+            word.append(letters.get(i));
+        }
+        return word.toString();
     }
 
     /**
          * Encontra e retorna o nodo que tem determinado caracter.
          * @param character - caracter a ser encontrado.
      */
-    public Optional<CharNode> findChildChar (char character) {
+    public CharNode findChildChar (char character) {
+        for (CharNode charNode: this.children){
+            if (charNode.getCharacter() == character) return charNode;
+        }
+        return null;
+    }
 
+    public boolean isFinal() {
+        return isFinal;
     }
 
     public char getCharacter() {

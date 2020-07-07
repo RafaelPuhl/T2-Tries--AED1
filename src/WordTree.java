@@ -1,21 +1,31 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class WordTree {
     private CharNode root;
     private int totalNodes = 0;
     private int totalWords = 0;
 
-    // ctor
-    public WordTree() {
-
+    public WordTree(String word) {
+        addWord(word);
     }
 
     public int getTotalWords() {
-
+        return totalWords;
     }
 
     public int getTotalNodes() {
+        return sumNodes(root, root.getNumberOfChildren());
+    }
 
+    private int sumNodes(CharNode node, int numberOfChildren) {
+        int totalNodes = numberOfChildren;
+        for (int i = 0; i < numberOfChildren; i++) {
+            CharNode child = node.getChild(i);
+            totalNodes += sumNodes(child, child.getNumberOfChildren());
+        }
+        return totalNodes;
     }
 
     /**
@@ -24,7 +34,16 @@ public class WordTree {
      */
 
     public void addWord(String word) {
-
+        char[] letters = word.toCharArray();
+        for (int i = 0; i < letters.length; i++) {
+            boolean isFinal = i == letters.length - 1;
+            if (root == null) {
+                root = new CharNode(letters[i]);
+            } else {
+                root.addChild(letters[i], isFinal);
+            }
+        }
+        totalWords++;
     }
 
     /**
@@ -34,7 +53,15 @@ public class WordTree {
      */
 
     private CharNode findCharNodeForWord(String word) {
-
+        char[] letter = word.toCharArray();
+        if (root == null) return null;
+        else if (root.getCharacter() != letter[0]) return null;
+        CharNode lastNode = null;
+        for (int i = 1; i < letter.length; i++){
+            lastNode = root.findChildChar(letter[i]);
+            if (lastNode == null) return null;
+        }
+        return lastNode;
     }
 
     /**
@@ -44,6 +71,6 @@ public class WordTree {
      */
 
     public List<String> searchAll(String prefix) {
-
+        return new ArrayList<>();
     }
 }
