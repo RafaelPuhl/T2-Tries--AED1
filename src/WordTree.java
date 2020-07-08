@@ -4,11 +4,10 @@ import java.util.Optional;
 
 public class WordTree {
     private CharNode root;
-    private int totalNodes = 0;
     private int totalWords = 0;
 
-    public WordTree(String word) {
-        addWord(word);
+    public WordTree() {
+        root = new CharNode();
     }
 
     public int getTotalWords() {
@@ -29,35 +28,35 @@ public class WordTree {
     }
 
     /**
-         *Adiciona palavra na estrutura em árvore
-         *@param word
+     * Adiciona palavra na estrutura em árvore
+     *
+     * @param word
      */
 
-    public void addWord(String word) {
-        char[] letters = word.toCharArray();
+    public void addWord(Palavra word) {
+        char[] letters = word.getPalavra().toCharArray();
         for (int i = 0; i < letters.length; i++) {
             boolean isFinal = i == letters.length - 1;
-            if (root == null) {
-                root = new CharNode(letters[i]);
+            if (isFinal) {
+                root.addChild(letters[i], true, word.getSignificado());
             } else {
-                root.addChild(letters[i], isFinal);
+                root.addChild(letters[i], false, null);
             }
         }
         totalWords++;
     }
 
     /**
-         * Vai descendo na árvore até onde conseguir encontrar a palavra
-         * @param word
-         * @return o nodo final encontrado
+     * Vai descendo na árvore até onde conseguir encontrar a palavra
+     *
+     * @param word
+     * @return o nodo final encontrado
      */
 
     private CharNode findCharNodeForWord(String word) {
         char[] letter = word.toCharArray();
-        if (root == null) return null;
-        else if (root.getCharacter() != letter[0]) return null;
         CharNode lastNode = null;
-        for (int i = 1; i < letter.length; i++){
+        for (int i = 1; i < letter.length; i++) {
             lastNode = root.findChildChar(letter[i]);
             if (lastNode == null) return null;
         }
@@ -65,9 +64,10 @@ public class WordTree {
     }
 
     /**
-         * Percorre a árvore e retorna uma lista com as palavras iniciadas pelo prefixo dado.
-         * Tipicamente, um método recursivo.
-         * @param prefix
+     * Percorre a árvore e retorna uma lista com as palavras iniciadas pelo prefixo dado.
+     * Tipicamente, um método recursivo.
+     *
+     * @param prefix
      */
 
     public List<String> searchAll(String prefix) {
