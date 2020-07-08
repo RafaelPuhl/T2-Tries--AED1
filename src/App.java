@@ -23,6 +23,7 @@ public class App {
                 for (String word : words) {
                     System.out.print(word + " ");
                 }
+                System.out.print("\n");
                 System.out.println("Entre com uma palavra para saber o seu significado");
                 String word = scanner.nextLine();
                 String meaning = wordTree.getWordMeaning(word);

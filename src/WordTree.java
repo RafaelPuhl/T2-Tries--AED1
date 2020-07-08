@@ -35,14 +35,7 @@ public class WordTree {
 
     public void addWord(Palavra word) {
         char[] letters = word.getPalavra().toCharArray();
-        for (int i = 0; i < letters.length; i++) {
-            boolean isFinal = i == letters.length - 1;
-            if (isFinal) {
-                root.addChild(letters[i], true, word.getSignificado());
-            } else {
-                root.addChild(letters[i], false, null);
-            }
-        }
+        insertCharacter(root, word.getSignificado(), letters, 0);
         totalWords++;
     }
 
@@ -56,11 +49,11 @@ public class WordTree {
     public List<String> searchAll(String prefix) {
         CharNode charNode = findCharNodeForWord(prefix);
         if (charNode == null) return new ArrayList<>();
-        else {
-            List<String> words = new ArrayList<>();
-            getWordForCharNode(charNode, words);
-        }
-        return new ArrayList<>();
+        List<String> words = new ArrayList<>();
+        Palavra palavra = charNode.getWord();
+        if (palavra != null) words.add(palavra.getPalavra());
+        getWordForCharNode(charNode, words);
+        return words;
     }
 
     private void getWordForCharNode(CharNode charNode, List<String> words) {
@@ -80,13 +73,14 @@ public class WordTree {
      */
 
     private CharNode findCharNodeForWord(String word) {
-        char[] letter = word.toCharArray();
-        CharNode lastNode = null;
-        for (int i = 1; i < letter.length; i++) {
-            lastNode = root.findChildChar(letter[i]);
-            if (lastNode == null) return null;
-        }
-        return lastNode;
+        return findLastNodeOfWordLetters(root, word.toCharArray(), 0);
+    }
+
+    private CharNode findLastNodeOfWordLetters(CharNode charNode, char[] letter, int index) {
+        CharNode child = charNode.findChildChar(letter[index]);
+        if (child == null) return null;
+        if (index == letter.length - 1) return child;
+        return findLastNodeOfWordLetters(child, letter, index + 1);
     }
 
     private int sumNodes(CharNode node, int numberOfChildren) {
@@ -98,7 +92,18 @@ public class WordTree {
         return totalNodes;
     }
 
-    private CharNode insertCharacter(CharNode charNode, ArrayList<Characters> characters, int index) {
-
+    private void insertCharacter(CharNode charNode, String meaning, char[] letters, int index) {
+        boolean isFinal = index == letters.length - 1;
+        if (isFinal) {
+            charNode.addChild(letters[index], true, meaning);
+        } else {
+            CharNode child = charNode.findChildChar(letters[index]);
+            if (child == null) {
+                charNode.addChild(letters[index]);
+                insertCharacter(charNode.findChildChar(letters[index]), meaning, letters, index + 1);
+            } else {
+                insertCharacter(child, meaning, letters, index + 1);
+            }
+        }
     }
 }

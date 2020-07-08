@@ -24,6 +24,10 @@ public class CharNode {
         this.children = new ArrayList<>();
     }
 
+    public CharNode addChild(char character) {
+        return addChild(character, false, null);
+    }
+
     /**
      * Adiciona um filho (caracter) no nodo. Não pode aceitar caracteres repetidos.
      *
@@ -86,7 +90,7 @@ public class CharNode {
      */
     public CharNode findChildChar(char character) {
         for (CharNode charNode : this.children) {
-            if (charNode.getCharacter() == character) return charNode;
+            if (Character.toLowerCase(charNode.getCharacter()) == Character.toLowerCase(character)) return charNode;
         }
         return null;
     }
