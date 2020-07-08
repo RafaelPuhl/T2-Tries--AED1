@@ -1,6 +1,6 @@
+import javax.xml.stream.events.Characters;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class WordTree {
     private CharNode root;
@@ -18,13 +18,13 @@ public class WordTree {
         return sumNodes(root, root.getNumberOfChildren());
     }
 
-    private int sumNodes(CharNode node, int numberOfChildren) {
-        int totalNodes = numberOfChildren;
-        for (int i = 0; i < numberOfChildren; i++) {
-            CharNode child = node.getChild(i);
-            totalNodes += sumNodes(child, child.getNumberOfChildren());
+    public String getWordMeaning(String word) {
+        CharNode charNode = findCharNodeForWord(word);
+        if (charNode != null) {
+            Palavra palavra = charNode.getWord();
+            if (palavra != null) return palavra.getSignificado();
         }
-        return totalNodes;
+        return null;
     }
 
     /**
@@ -47,6 +47,32 @@ public class WordTree {
     }
 
     /**
+     * Percorre a árvore e retorna uma lista com as palavras iniciadas pelo prefixo dado.
+     * Tipicamente, um método recursivo.
+     *
+     * @param prefix
+     */
+
+    public List<String> searchAll(String prefix) {
+        CharNode charNode = findCharNodeForWord(prefix);
+        if (charNode == null) return new ArrayList<>();
+        else {
+            List<String> words = new ArrayList<>();
+            getWordForCharNode(charNode, words);
+        }
+        return new ArrayList<>();
+    }
+
+    private void getWordForCharNode(CharNode charNode, List<String> words) {
+        for (int i = 0; i < charNode.getNumberOfChildren(); i++) {
+            CharNode child = charNode.getChild(i);
+            Palavra word = child.getWord();
+            if (word != null) words.add(word.getPalavra());
+            getWordForCharNode(child, words);
+        }
+    }
+
+    /**
      * Vai descendo na árvore até onde conseguir encontrar a palavra
      *
      * @param word
@@ -63,14 +89,16 @@ public class WordTree {
         return lastNode;
     }
 
-    /**
-     * Percorre a árvore e retorna uma lista com as palavras iniciadas pelo prefixo dado.
-     * Tipicamente, um método recursivo.
-     *
-     * @param prefix
-     */
+    private int sumNodes(CharNode node, int numberOfChildren) {
+        int totalNodes = numberOfChildren;
+        for (int i = 0; i < numberOfChildren; i++) {
+            CharNode child = node.getChild(i);
+            totalNodes += sumNodes(child, child.getNumberOfChildren());
+        }
+        return totalNodes;
+    }
 
-    public List<String> searchAll(String prefix) {
-        return new ArrayList<>();
+    private CharNode insertCharacter(CharNode charNode, ArrayList<Characters> characters, int index) {
+
     }
 }

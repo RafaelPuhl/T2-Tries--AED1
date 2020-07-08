@@ -60,7 +60,7 @@ public class CharNode {
      *
      * @return a palavra
      */
-    private Palavra getWord() {
+    public Palavra getWord() {
         if (isFinal) {
             List<Character> letters = new ArrayList<>();
             letters.add(character);
