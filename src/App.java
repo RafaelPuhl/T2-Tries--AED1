@@ -28,7 +28,7 @@ public class App {
                 String word = scanner.nextLine();
                 String meaning = wordTree.getWordMeaning(word);
                 if (meaning == null) System.out.println("Significado de " + word + " não encontrado");
-                System.out.println("O significado de " + word + " é: " + meaning);
+                System.out.println("O Nome " + word + " " + meaning);
             } else System.out.println("Nenhuma palavra encontrada para este prefixo: " + prefix);
         } while (true);
     }
